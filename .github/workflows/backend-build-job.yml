@@ -18,6 +18,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Listing
+        run: ls
+      - name: Listing
+        run: ls spring-boot-data-jpa-mysql-master
       - name: Start Docker Compose
         run: |
           docker-compose -f spring-boot-data-jpa-mysql-master/docker-compose.yml up -d
