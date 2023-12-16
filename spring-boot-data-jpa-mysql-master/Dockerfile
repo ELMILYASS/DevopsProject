@@ -1,8 +1,9 @@
 FROM maven:3.8.4-openjdk-17 as build
 RUN groupadd -r mygroup && useradd -r -g mygroup -m -d /home/myuser myuser
 USER myuser
-ARG JAR_FILE= target/*.jar
-COPY ${JAR_FILE} app.jar
+#ARG JAR_FILE= target/*.jar
+
+COPY target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT [ "java","-jar","/app.jar" ]
 # WORKDIR /home/myuser/workspace/app

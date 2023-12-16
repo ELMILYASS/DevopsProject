@@ -3,7 +3,7 @@
 .vscode
 
 # Ignore les fichiers générés par Maven
-/target/
+# /target/
 
 # Ignore les fichiers de sauvegarde
 *~
