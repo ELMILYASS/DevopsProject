@@ -26,6 +26,8 @@ jobs:
           - 3308:3306
     steps:
       - name: Show MySQL logs
+        run: docker ps -a
+      - name: Show MySQL logs
         run: docker logs mysql
       - name: Wait for MySQL to be ready
         run: sleep 60
