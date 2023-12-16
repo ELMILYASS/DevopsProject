@@ -18,14 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Dir
-        run: pwd
-      - uses: actions/checkout@v3
-      - name: Listing
-        run: ls
       - name: Start Docker Compose
         run: |
-          docker-compose -f ./docker-compose.yml up -d
+          docker-compose -f ./spring-boot-data-jpa-mysql-master/docker-compose.yml up -d
           sleep 10  # Add a delay to allow services to start (adjust as needed)
       - name: Show MySQL logs
         run: docker logs mysql-container
