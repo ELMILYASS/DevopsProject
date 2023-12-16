@@ -25,12 +25,10 @@ jobs:
         ports:
           - 3308:3306
     steps:
+      - name: Show MySQL logs
+        run: docker logs mysql
       - name: Wait for MySQL to be ready
-        run: |
-          until docker exec -i mysql mysqladmin -uroot -proot_password ping --silent; do
-            echo 'Waiting for MySQL to be ready...'
-            sleep 5
-          done
+        run: sleep 60
 
       - uses: actions/checkout@v3
 
