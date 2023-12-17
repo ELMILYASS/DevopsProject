@@ -44,7 +44,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app
-          path: spring-boot-data-jpa-mysql/target  
+          path: spring-boot-data-jpa-mysql-master/target  
       - name: Build Docker image
         run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:latest .
       - name: Log in to Docker Hub
