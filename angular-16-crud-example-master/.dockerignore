@@ -2,7 +2,7 @@
 node_modules/
 
 # Ignore any temporary build files
-dist/
+# dist/
 .tmp/
 tmp/
 out-tsc/
