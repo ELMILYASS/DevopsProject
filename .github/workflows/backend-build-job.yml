@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'spring-boot-data-jpa-mysql-master/**'
+      - '.github/workflows/**'
 jobs:
   maven-build:
     runs-on: ubuntu-latest
@@ -42,6 +45,8 @@ jobs:
         with:
           name: app
           path: spring-boot-data-jpa-mysql-master/target
+      - name: Download JAR file
+        run : ls spring-boot-data-jpa-mysql-master/target
       - name: Build Docker image
         run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:latest .
       - name: Log in to Docker Hub
