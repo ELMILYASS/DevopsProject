@@ -27,12 +27,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: cd spring-boot-data-jpa-mysql && mvn -B package
+      run: cd spring-boot-data-jpa-mysql-master && mvn -B package
     - name: Archive JAR file
       uses: actions/upload-artifact@v3
       with:
         name: app
-        path: spring-boot-data-jpa-mysql/target/*.jar
+        path: spring-boot-data-jpa-mysql-master/target/*.jar
         
   docker-build:
       runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
           name: app
           path: spring-boot-data-jpa-mysql/target  
       - name: Build Docker image
-        run: cd spring-boot-data-jpa-mysql && docker build -f "DockerFile" -t elmazidi/myapp-backend:latest .
+        run: cd spring-boot-data-jpa-mysql-master && docker build -f "DockerFile" -t elmazidi/myapp-backend:latest .
       - name: Log in to Docker Hub
         run:  docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
