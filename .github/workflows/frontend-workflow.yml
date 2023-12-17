@@ -27,15 +27,11 @@ jobs:
 
     - name: Build Distribution
       run: cd angular-16-crud-example-master && ng build 
-    - name: list 
-      run: ls angular-16-crud-example-master
-    - name: list all
-      run: ls 
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
       with:
         name: dist
-        path: angular-16-crud-example-master/dist
+        path: angular-16-crud-example-master/dist/
   docker-build:
     runs-on: ubuntu-latest
     needs: node-build 
