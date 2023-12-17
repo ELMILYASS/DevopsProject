@@ -51,18 +51,4 @@ jobs:
         run:  docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
         run: docker push elmazidi/myapp-backend:latest
-  deploy:
-      runs-on: ubuntu-latest
-      needs: docker-build
-      steps:
-       - name: Running MySQL container
-         run: docker run -p 3308:3306 -d --name mysql-container -e MYSQL_ROOT_PASSWORD=password mysql:8.0.2 
-       - name: Wait for MySQL to be ready
-         run: sleep 20
-       - name: Running backend container
-         run: docker run -p 8080:8080 --name myapp-backend-container  elmazidi/myapp-backend:latest
-       - name: Wait for the backend to be ready
-         run: sleep 30
-       - name: Send a get request to the backend application
-         run: curl http://localhost:8080/api/tutorials
    
