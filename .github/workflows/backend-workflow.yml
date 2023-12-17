@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - "spring-boot-data-jpa-mysql-master/**"
-      - ".github/workflows/backend-build-job.yml"
+      - ".github/workflows/backend-workflow.yml"
 jobs:
   maven-build:
     runs-on: ubuntu-latest
