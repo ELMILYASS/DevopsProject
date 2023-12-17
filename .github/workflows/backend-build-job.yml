@@ -58,14 +58,11 @@ jobs:
        - name: Running MySQL container
          run: docker run -p 3308:3306 -d --name mysql-container -e MYSQL_ROOT_PASSWORD=password mysql:8.0.2 
        - name: Wait for MySQL to be ready
-         run: |
-          until docker exec -i mysql-container mysqladmin -uroot -ppassword ping --silent; do
-            echo 'Waiting for MySQL to be ready...'
-            sleep 5
-          done
+         run: sleep 20
        - name: Running backend container
          run: docker run -p 8080:8080 --name myapp-backend-container  elmazidi/myapp-backend:latest
-         
+       - name: Wait for the backend to be ready
+         run: sleep 30
        - name: Send a get request to the backend application
          run: curl http://localhost:8080/api/tutorials
    
