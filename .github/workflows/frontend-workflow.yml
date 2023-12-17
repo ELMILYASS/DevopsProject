@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: dist
-        path: angular-16-crud-example-master/dist/
+        path: angular-16-crud-example-master/dist
   docker-build:
     runs-on: ubuntu-latest
     needs: node-build 
@@ -42,7 +42,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: dist
-        path: angular-16-crud-example-master
+        path: angular-16-crud-example-master/dist
     - name: list 
       run: ls angular-16-crud-example-master
     - name: list all
