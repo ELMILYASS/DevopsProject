@@ -9,7 +9,7 @@ on:
       - '.github/workflows/frontend-workflow.yml'
 jobs:
   node-build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
         name: dist
         path: angular-16-crud-example-master/dist
   docker-build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: node-build 
     steps:
     - name: Checkout Repository
