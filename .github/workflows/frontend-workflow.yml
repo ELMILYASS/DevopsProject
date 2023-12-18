@@ -24,7 +24,6 @@ jobs:
         cd angular-16-crud-example-master
         npm install
         npm install -g @angular/cli
-
     - name: Build Distribution
       run: cd angular-16-crud-example-master && ng build 
     - name: Archive dist folder
