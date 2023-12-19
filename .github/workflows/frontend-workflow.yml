@@ -7,7 +7,7 @@ on:
     paths:
       - 'angular-16-crud-example-master/**'
       - '.github/workflows/frontend-workflow.yml'
-      - '!README.md'  # Exclude README.md from triggering the workflow
+      - '!README.md' 
       - '!angular-16-crud-example-master/README.md'
 jobs:
   node-build:
