@@ -15,8 +15,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: list
-      run: ls
+    - name: cd 
+      run: cd angular-16-crud-example-master
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
