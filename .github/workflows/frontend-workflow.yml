@@ -16,7 +16,6 @@ jobs:
     with:
        directory: angular-16-crud-example-master
        artifact-name: dist
-  
   docker-build:
     runs-on: ubuntu-latest
     needs: node-build 
