@@ -7,11 +7,11 @@ on:
     paths:
       - 'angular-16-crud-example-master/**'
       - '.github/workflows/frontend-workflow.yml'
-      - "!README.md"  # Exclude README.md from triggering the workflow
-      - 'angular-16-crud-example-master/README.md'
+      - '!README.md'  # Exclude README.md from triggering the workflow
+      - '!angular-16-crud-example-master/README.md'
 jobs:
   node-build:
-    if: github.event.head_commit.message =~ /run workflow$/i
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: self-hosted
     steps:
     - name: Checkout Repository
