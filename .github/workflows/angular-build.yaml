@@ -1,4 +1,3 @@
-
 name:  Build an Angular application
 
 on:
@@ -10,6 +9,7 @@ on:
         description: Name of the directory
         default: .
       artifact-name: 
+        description: Name of artifact build name
         default: dist
 jobs:
   node-build:
