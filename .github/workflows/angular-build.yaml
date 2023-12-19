@@ -26,11 +26,7 @@ jobs:
         node-version: '20'
         cache-dependency-path: ${{ github.event.inputs.directory }}/package-lock.json
     - name: Install Dependencies
-      run: |
-        echo ${{ github.event.inputs.directory }}
-        cd ${{ github.event.inputs.directory }}
-        npm install
-        npm install -g @angular/cli
+      run: cd ${{ github.event.inputs.directory }} && npm install && npm install -g @angular/cli
     - name: Build Distribution
       run: cd ${{ github.event.inputs.directory }} && ng build 
     - name: Archive dist folder
