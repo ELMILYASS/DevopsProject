@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ github.event.inputs.artifact-name }}
-        path: ${{ github.event.inputs.directory }}/dist
+        path: ${{ github.event.inputs.directory }}/${{ github.event.inputs.artifact-name }}
