@@ -1,0 +1,30 @@
+
+name:  Build an Angular application
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      directory: 
+        description: Name of the directory
+        default: .
+jobs:
+  node-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+    - name: Install Dependencies
+      run: |
+        cd ${{ github.event.inputs.directory }}
+        npm install
+        npm install -g @angular/cli
+    - name: Build Distribution
+      run: cd ${{ github.event.inputs.directory }} && ng build 
