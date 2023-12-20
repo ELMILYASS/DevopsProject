@@ -1,5 +1,4 @@
 name:  Build and Package Frontend App 
-
 on:
   push:
     branches: [ "main" ]
