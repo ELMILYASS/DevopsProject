@@ -28,9 +28,9 @@ jobs:
     - name: Install Dependencies
       run: cd ${{ inputs.directory }} && npm install && npm install -g @angular/cli
     - name: Build Distribution
-      run: cd ${{ github.event.inputs.directory }} && ng build 
+      run: cd ${{ inputs.directory }} && ng build 
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ github.event.inputs.artifact-name }}
-        path: ${{ github.event.inputs.directory }}/${{ github.event.inputs.artifact-name }}
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.directory }}/${{ inputs.artifact-name }}
