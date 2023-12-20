@@ -11,6 +11,7 @@ jobs:
   node-build:
     if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
+    
     with:
        directory: "angular-16-crud-example-master"
        artifact-name: "dist"
