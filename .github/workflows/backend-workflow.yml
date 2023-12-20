@@ -27,6 +27,11 @@ jobs:
         uses: ./actions/maven-build-action
         with:
           directory: spring-boot-data-jpa-mysql-master
+      - name: Archive JAR file
+        uses: actions/upload-artifact@v3
+        with:
+          name: app
+          path: spring-boot-data-jpa-mysql-master/target/*.jar
   docker-build:
     runs-on: ubuntu-latest
     needs: maven-build
