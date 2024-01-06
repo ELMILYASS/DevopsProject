@@ -58,19 +58,23 @@ jobs:
     steps:
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
-      - name: Update deployment version
-        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:test/g" backend-app.yaml
+      - name: Move to
+        run: cd K8sClusterDevopsProject/dev && ls
+      - name: Log
+        run: ls
+      # - name: Update deployment version
+      #   run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:test/g" backend-app.yaml
 
-      - name: Display updated deployment file
-        run: cd K8sClusterDevopsProject/dev &&  cat backend-app.yaml
+      # - name: Display updated deployment file
+      #   run: cd K8sClusterDevopsProject/dev &&  cat backend-app.yaml
 
-      - name: Commit changes
-        run: |
-          git add .
-          git commit -m "backend version test"
+      # - name: Commit changes
+      #   run: |
+      #     git add .
+      #     git commit -m "backend version test"
 
-      - name: Set Git remote URL
-        run: git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
+      # - name: Set Git remote URL
+      #   run: git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
 
-      - name: Push changes to GitLab
-        run: git push -uf origin main
+      # - name: Push changes to GitLab
+      #   run: git push -uf origin main
