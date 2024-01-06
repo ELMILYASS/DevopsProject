@@ -78,4 +78,4 @@ jobs:
         run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
 
       - name: Push changes to Github
-        run: git cd K8sClusterDevopsProject && push -uf origin main
+        run: cd K8sClusterDevopsProject && git push -uf origin main
