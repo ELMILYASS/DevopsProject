@@ -11,5 +11,5 @@ jobs:
       - name: Extract
         uses: ./actions/image-version-action
       - name: Log
-        run: echo ${{ env }}
+        run: echo ${{ env.version }}
    
