@@ -21,6 +21,6 @@ jobs:
             echo "version=latest" >> $GITHUB_OUTPUT
           else
             echo "version=$version" >> $GITHUB_OUTPUT
-          fi |
+          fi
       - name: use tag
         run: echo ${{ steps.extract-version.outputs.version }}
