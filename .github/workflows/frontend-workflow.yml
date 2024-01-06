@@ -39,6 +39,9 @@ jobs:
       - name: Share image version with the next Job
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
+        
+ 
+        
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
     needs: docker-build
@@ -50,7 +53,7 @@ jobs:
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
       - name: Update deployment version
-        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{needs.docker-build.outputs.version}}/g" frontend-app.yaml
+        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-frontend:.*/myapp-frontend:${{needs.docker-build.outputs.version}}/g" frontend-app.yaml
 
       - name: Display updated deployment file
         run: cd K8sClusterDevopsProject/dev && cat frontend-app.yaml
