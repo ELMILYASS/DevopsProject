@@ -54,7 +54,7 @@ jobs:
         run: docker push elmazidi/myapp-backend:${{ env.version }}
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
-
+    needs: maven-build
     steps:
       - name: Configure Git
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
       - name: Update deployment version
-        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:test/g" backend-app.yaml
+        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{ env.version }}/g" backend-app.yaml
 
       - name: Display updated deployment file
         run: cd K8sClusterDevopsProject/dev && cat backend-app.yaml
@@ -72,7 +72,7 @@ jobs:
         run: |
           cd K8sClusterDevopsProject
           git add .
-          git commit -m "backend version test"
+          git commit -m "backend version ${{ env.version }}"
 
       - name: Set Git remote URL
         run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBTOKEN }}@github.com/ELMILYASS/K8sClusterDevopsProject.git
