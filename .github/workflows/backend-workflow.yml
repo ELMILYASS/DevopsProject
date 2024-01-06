@@ -15,6 +15,12 @@ jobs:
     steps:
       - name: Extract version from commit message
         id: extract-version
-        run: echo "version=$(echo ${{ github.event.head_commit.message }} | grep -oP 'tag:[^\s]+' | cut -d':' -f2)" >> $GITHUB_OUTPUT
+        run: |
+          version=$(echo ${{ github.event.head_commit.message }} | grep -oP 'tag:[^\s]+' | cut -d':' -f2)
+          if [ -z "$version" ]; then
+            echo "version=latest" >> $GITHUB_OUTPUT
+          else
+            echo "version=$version" >> $GITHUB_OUTPUT
+          fi |
       - name: use tag
         run: echo ${{ steps.extract-version.outputs.version }}
