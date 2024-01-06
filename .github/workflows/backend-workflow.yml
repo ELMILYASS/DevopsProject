@@ -59,7 +59,7 @@ jobs:
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
 
       - name: Change directory
-        run: cd  K8sClusterDevopsProject/dev
+        run: cd  K8sClusterDevopsProject/dev/
       - name: Change directory
         run: ls
       - name: Update deployment version
