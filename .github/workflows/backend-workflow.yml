@@ -62,7 +62,7 @@ jobs:
         run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:test/g" backend-app.yaml
 
       - name: Display updated deployment file
-        run: cat backend-app.yaml
+        run: cd K8sClusterDevopsProject/dev &&  cat backend-app.yaml
 
       - name: Commit changes
         run: |
