@@ -54,12 +54,13 @@ jobs:
         run: docker push elmazidi/myapp-backend:${{ env.version }}
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
 
       - name: Change directory
-        run: ls
+        run: ls  K8sClusterDevopsProject
       - name: Change directory
         run: ls
       - name: Update deployment version
