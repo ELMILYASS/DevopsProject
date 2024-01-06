@@ -11,7 +11,6 @@ jobs:
   node-build:
     if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
-
     with:
       directory: "angular-16-crud-example-master"
       artifact-name: "dist"
@@ -39,9 +38,7 @@ jobs:
       - name: Share image version with the next Job
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
-        
- 
-        
+
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
     needs: docker-build
@@ -67,5 +64,5 @@ jobs:
       - name: Set Git remote URL
         run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBTOKEN }}@github.com/ELMILYASS/K8sClusterDevopsProject.git
 
-      - name: Push changes to Github
+      - name: Push changes to Github Repo
         run: cd K8sClusterDevopsProject && git push -uf origin main
