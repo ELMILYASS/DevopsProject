@@ -8,7 +8,6 @@ on:
       - ".github/workflows/backend-workflow.yml"
       - "!README.md"
       - "!spring-boot-data-jpa-mysql-master/README.md"
-
 jobs:
   test-extract-tag:
     runs-on: ubuntu-latest
