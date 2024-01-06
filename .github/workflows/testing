@@ -1,0 +1,15 @@
+name: Testing
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract
+        uses: ./actions/image-version-action
+      - name: Log
+        run: echo ${{ steps.extract-version.outputs.version }}
+   
