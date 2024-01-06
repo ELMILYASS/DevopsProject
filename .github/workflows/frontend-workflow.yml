@@ -1,34 +1,68 @@
-name:  Build and Package Frontend App 
+name: Build and Package Frontend App
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
-      - 'angular-16-crud-example-master/**'
-      - '.github/workflows/frontend-workflow.yml'
-      - '!README.md' 
-      - '!angular-16-crud-example-master/README.md'
+      - "angular-16-crud-example-master/**"
+      - ".github/workflows/frontend-workflow.yml"
+      - "!README.md"
+      - "!angular-16-crud-example-master/README.md"
 jobs:
   node-build:
     if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
-    
+
     with:
-       directory: "angular-16-crud-example-master"
-       artifact-name: "dist"
+      directory: "angular-16-crud-example-master"
+      artifact-name: "dist"
   docker-build:
     runs-on: ubuntu-latest
-    needs: node-build 
+    needs: node-build
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-    - name: Download dist folder
-      uses: actions/download-artifact@v3
-      with:
-        name: dist
-        path: angular-16-crud-example-master/dist
-    - name: Build Docker image
-      run: cd angular-16-crud-example-master && docker build -t elmazidi/myapp-frontend:latest .
-    - name: Log in to Docker Hub
-      run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build and push frontend Docker image
-      run: docker push elmazidi/myapp-frontend:latest
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Download dist folder
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: angular-16-crud-example-master/dist
+      - name: Extract image version
+        uses: ./actions/image-version-action
+      - name: Build Docker image
+        run: cd angular-16-crud-example-master && docker build -t elmazidi/myapp-frontend:${{ env.version }} .
+      - name: Log in to Docker Hub
+        run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push frontend Docker image
+        run: docker push elmazidi/myapp-frontend:${{ env.version }}
+      - name: Share image version with the next Job
+        id: extract-version
+        run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
+  gitops-k8s-deploy:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - name: Configure Git
+        run: |
+          git config --global user.email "ilyasselmazidi123@gmail.com"
+          git config --global user.name "ELMILYASS"
+      - name: Clone the Git repository containing the K8s cluster's configuration files.
+        run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
+      - name: Update deployment version
+        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{needs.docker-build.outputs.version}}/g" frontend-app.yaml
+
+      - name: Display updated deployment file
+        run: cd K8sClusterDevopsProject/dev && cat frontend-app.yaml
+
+      - name: Commit changes
+        run: |
+          cd K8sClusterDevopsProject
+          git add .
+          git commit -m "frontend version ${{needs.docker-build.outputs.version}}"
+
+      - name: Set Git remote URL
+        run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBTOKEN }}@github.com/ELMILYASS/K8sClusterDevopsProject.git
+
+      - name: Push changes to Github
+        run: cd K8sClusterDevopsProject && git push -uf origin main
