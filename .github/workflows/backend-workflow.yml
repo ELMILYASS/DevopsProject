@@ -67,8 +67,6 @@ jobs:
           git config --global user.name "ELMILYASS"
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
-      - name: Extract image version
-        uses: ./actions/image-version-action
       - name: Update deployment version
         run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{needs.docker-build.outputs.version}}/g" backend-app.yaml
 
