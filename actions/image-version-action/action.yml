@@ -8,8 +8,8 @@ runs:
       run: |
         version=$(echo ${{ github.event.head_commit.message }} | grep -oP 'tag:[^\s]+' | cut -d':' -f2)
         if [ -z "$version" ]; then
-          echo "version=latest" >> $GITHUB_OUTPUT
+          echo "version=latest" >> $GITHUB_ENV
         else
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_ENV
         fi
       shell: bash
