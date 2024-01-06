@@ -44,11 +44,11 @@ jobs:
         with:
           name: app
           path: spring-boot-data-jpa-mysql-master/target
-      - name: Build maven app
+      - name: Extract image version
         uses: ./actions/image-version-action
       - name: Build Docker image
-        run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:${{ steps.extract-version.outputs.version }} .
+        run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:${{ env.version }} .
       - name: Log in to Docker Hub
         run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
-        run: docker push elmazidi/myapp-backend:${{ steps.extract-version.outputs.version }}
+        run: docker push elmazidi/myapp-backend:${{ env.version }}
