@@ -75,7 +75,7 @@ jobs:
           git commit -m "backend version test"
 
       - name: Set Git remote URL
-        run: git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
+        run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
 
       - name: Push changes to GitLab
         run: git push -uf origin main
