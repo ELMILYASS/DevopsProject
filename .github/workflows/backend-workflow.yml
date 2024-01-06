@@ -54,7 +54,7 @@ jobs:
         run: docker push elmazidi/myapp-backend:${{ env.version }}
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
-    needs: maven-build
+    needs: docker-build
     steps:
       - name: Configure Git
         run: |
