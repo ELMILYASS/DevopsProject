@@ -10,43 +10,11 @@ on:
       - "!spring-boot-data-jpa-mysql-master/README.md"
 
 jobs:
-  maven-build:
-    if: "contains(github.event.head_commit.message,'run workflow')"
+  test-extract-tag:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.2.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - uses: actions/checkout@v3
-      - name: Build maven app
-        uses: ./actions/maven-build-action
-        with:
-          directory: spring-boot-data-jpa-mysql-master
-      - name: Archive JAR file
-        uses: actions/upload-artifact@v3
-        with:
-          name: app
-          path: spring-boot-data-jpa-mysql-master/target/*.jar
-  
-  docker-build:
-    runs-on: ubuntu-latest
-    needs: maven-build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Download JAR file
-        uses: actions/download-artifact@v3
-        with:
-          name: app
-          path: spring-boot-data-jpa-mysql-master/target
-      - name: Build Docker image
-        run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:latest .
-      - name: Log in to Docker Hub
-        run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and push backend Docker image
-        run: docker push elmazidi/myapp-backend:latest
+      - name: Extract version from commit message
+        id: extract-version
+        run: echo "::set-output name=version::$(echo ${{ github.event.head_commit.message }} | grep -oP 'tag:[^\s]+' | cut -d':' -f2)"
+      - name: use tag
+        run: echo ${{ steps.extract-version.outputs.version }}
