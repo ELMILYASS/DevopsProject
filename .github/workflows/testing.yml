@@ -1,4 +1,4 @@
-name: Testing
+vname: Testing
 on:
   push:
     branches:
@@ -11,5 +11,5 @@ jobs:
       - name: Extract
         uses: ./actions/image-version-action
       - name: Log
-        run: echo ${{ steps.extract-version.outputs.version }}
+        run: echo ${{ env }}
    
