@@ -52,3 +52,28 @@ jobs:
         run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
         run: docker push elmazidi/myapp-backend:${{ env.version }}
+  gitops-k8s-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the Git repository containing the K8s cluster's configuration files.
+        run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
+
+      - name: Change directory
+        run: cd  K8sClusterDevopsProject/dev/
+
+      - name: Update deployment version
+        run: sed -i "s/myapp-backend:.*/myapp-backend:${{ env.TAG }}/g" backend-app.yaml
+
+      - name: Display updated deployment file
+        run: cat backend-app.yaml
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "backend version ${{ env.TAG }}"
+
+      - name: Set Git remote URL
+        run: git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBPASSWORD }}@/github.com/ELMILYASS/K8sClusterDevopsProject.git
+
+      - name: Push changes to GitLab
+        run: git push -uf origin main
