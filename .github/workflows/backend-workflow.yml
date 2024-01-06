@@ -36,6 +36,8 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs: maven-build
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -52,6 +54,9 @@ jobs:
         run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
         run: docker push elmazidi/myapp-backend:${{ env.version }}
+      - name: Share image version with the next Job
+        id: extract-version
+        run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
     needs: docker-build
@@ -65,7 +70,7 @@ jobs:
       - name: Extract image version
         uses: ./actions/image-version-action
       - name: Update deployment version
-        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{ env.version }}/g" backend-app.yaml
+        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-backend:.*/myapp-backend:${{needs.docker-build.outputs.version}}/g" backend-app.yaml
 
       - name: Display updated deployment file
         run: cd K8sClusterDevopsProject/dev && cat backend-app.yaml
@@ -74,7 +79,7 @@ jobs:
         run: |
           cd K8sClusterDevopsProject
           git add .
-          git commit -m "backend version ${{ env.version }}"
+          git commit -m "backend version ${{needs.docker-build.outputs.version}}"
 
       - name: Set Git remote URL
         run: cd K8sClusterDevopsProject && git remote set-url origin https://ELMILYASS:${{ secrets.GITHUBTOKEN }}@github.com/ELMILYASS/K8sClusterDevopsProject.git
