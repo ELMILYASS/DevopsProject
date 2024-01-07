@@ -28,6 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+         path: angular-16-crud-example-master
+      - name: Log
+        run: ls
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         continue-on-error: false
@@ -35,7 +39,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
-          projectBaseDir: angular-16-crud-example-master/
+          
 
   node-build:
     needs: sast
