@@ -35,7 +35,7 @@ jobs:
           cd angular-16-crud-example-master
           npm install
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=high
+          snyk test --severity-threshold=high --file=package.json
 
   node-build:
     needs: sast
