@@ -9,7 +9,6 @@ on:
       - "!angular-16-crud-example-master/README.md"
 jobs:
   sast:
-    if: ${{ false }}
     name: SonarCloud SAST
     runs-on: ubuntu-latest
     steps:
@@ -39,9 +38,8 @@ jobs:
           snyk monitor
 
   node-build:
-    needs: sast
-    # if: "contains(github.event.head_commit.message,'run workflow')"
-    if: ${{ false }}
+    needs: [sast,sca]
+    if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
     with:
       directory: "angular-16-crud-example-master"
@@ -63,6 +61,15 @@ jobs:
         uses: ./actions/image-version-action
       - name: Build Docker image
         run: cd angular-16-crud-example-master && docker build -t elmazidi/myapp-frontend:${{ env.version }} .
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run Snyk to check for vulnerabilities
+        run: |
+          cd angular-16-crud-example-master
+          npm install
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk container test elmazidi/myapp-frontend:${{ env.version }}
+          snyk container monitor elmazidi/myapp-frontend:${{ env.version }}
       - name: Log in to Docker Hub
         run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push frontend Docker image
@@ -72,6 +79,7 @@ jobs:
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
 
   gitops-k8s-deploy:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: docker-build
     steps:
