@@ -17,7 +17,7 @@ jobs:
        uses: AppThreat/sast-scan-action@1.0.2
        with:
           src: angular-16-crud-example-master/
-          type: node
+          type: javascript
   node-build:
     if: ${{ false }}
     # if: "contains(github.event.head_commit.message,'run workflow')"
