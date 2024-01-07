@@ -28,11 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Change to Frontend Directory
-        run: cd angular-16-crud-example-master
-        working-directory: ${{ github.workspace }}
-      - name: Logging 
-        run: ls
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         continue-on-error: false
@@ -40,6 +35,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
+          working-directory: angular-16-crud-example-master
           
 
   node-build:
