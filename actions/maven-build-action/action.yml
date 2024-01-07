@@ -5,7 +5,9 @@ inputs:
     description: "spring boot app directory"
     default: "."
   GITHUBTOKEN:
+    description: "github token"
   SONARTOKEN:
+    description: "sonarcloud token"
   
 runs:
   using: "composite"
