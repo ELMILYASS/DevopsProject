@@ -25,6 +25,7 @@ jobs:
           type: java
           
   maven-build:
+    needs: sast-test
     if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     services:
