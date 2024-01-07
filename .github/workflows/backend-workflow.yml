@@ -10,6 +10,20 @@ on:
       - "!spring-boot-data-jpa-mysql-master/README.md"
 
 jobs:
+  sast-test:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v3
+     - name: sast-scan
+       uses: AppThreat/sast-scan-action@1.0.2
+       with:
+        # Source directory to scan. Defaults to workspace
+          src: /spring-boot-data-jpa-mysql-master
+          # Output directory for the generated reports. Defaults to reports
+          output: /spring-boot-data-jpa-mysql-master/reports
+          # Project type. Eg: java, python, nodejs. Comma separated values allowed.
+          type: java
+          
   maven-build:
     if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
