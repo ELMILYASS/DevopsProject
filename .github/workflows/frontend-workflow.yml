@@ -8,19 +8,8 @@ on:
       - "!README.md"
       - "!angular-16-crud-example-master/README.md"
 jobs:
-  sast-test:
-    runs-on: ubuntu-latest
-    steps:
-     - name: Checkout code
-       uses: actions/checkout@v3
-     - name: sast-test
-       uses: AppThreat/sast-scan-action@1.0.2
-       with:
-          src: angular-16-crud-example-master/
-          type: javascript
   node-build:
-    if: ${{ false }}
-    # if: "contains(github.event.head_commit.message,'run workflow')"
+    if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
     with:
       directory: "angular-16-crud-example-master"
