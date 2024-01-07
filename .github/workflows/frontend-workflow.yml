@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@master
         with:
          path: angular-16-crud-example-master/*
-      - name: Log
+      - name: Logging
         run: ls
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
