@@ -15,11 +15,15 @@ jobs:
     steps:
      - name: Checkout code
        uses: actions/checkout@v3
-     - name: sast-test
-       uses: AppThreat/sast-scan-action@1.0.2
        with:
-          src: spring-boot-data-jpa-mysql-master/
-          type: java
+         fetch-depth: 0
+     - name: SonarCloud Scan
+       uses: sonarsource/sonarcloud-github-action@master
+       with:
+        projectBaseDir: spring-boot-data-jpa-mysql-master
+       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
   maven-build:
     # if: "contains(github.event.head_commit.message,'run workflow')"
