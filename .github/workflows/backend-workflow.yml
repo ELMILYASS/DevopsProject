@@ -27,6 +27,8 @@ jobs:
         uses: ./actions/maven-build-action
         with:
           directory: spring-boot-data-jpa-mysql-master
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
