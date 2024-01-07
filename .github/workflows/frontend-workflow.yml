@@ -35,6 +35,8 @@ jobs:
           cd angular-16-crud-example-master
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   node-build:
     needs: sast
