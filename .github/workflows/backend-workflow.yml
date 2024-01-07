@@ -18,7 +18,7 @@ jobs:
      - name: sast-test
        uses: AppThreat/sast-scan-action@1.0.2
        with:
-          src: /spring-boot-data-jpa-mysql-master
+          src: spring-boot-data-jpa-mysql-master/
           type: java
           
   maven-build:
