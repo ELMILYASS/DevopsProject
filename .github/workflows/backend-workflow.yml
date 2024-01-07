@@ -10,8 +10,31 @@ on:
       - "!spring-boot-data-jpa-mysql-master/README.md"
       - "actions/maven-build-action/action.yml"
 jobs:
+  sast-test:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java-kotlin' ]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
   maven-build:
-    if: "contains(github.event.head_commit.message,'run workflow')"
+    # if: "contains(github.event.head_commit.message,'run workflow')"
+    if: ${{ false }}
     runs-on: ubuntu-latest
     services:
       mysql:
