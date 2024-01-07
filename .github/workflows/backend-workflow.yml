@@ -15,14 +15,14 @@ jobs:
     steps:
      - uses: actions/checkout@v3
      - name: Log
-       run: ls && ls /spring-boot-data-jpa-mysql-master
+       run: ls && ls spring-boot-data-jpa-mysql-master
      - name: sast-scan
        uses: AppThreat/sast-scan-action@1.0.2
        with:
         # Source directory to scan. Defaults to workspace
-          src: /spring-boot-data-jpa-mysql-master
+          src: spring-boot-data-jpa-mysql-master
           # Output directory for the generated reports. Defaults to reports
-          output: /spring-boot-data-jpa-mysql-master/reports
+          output: spring-boot-data-jpa-mysql-master/reports
           # Project type. Eg: java, python, nodejs. Comma separated values allowed.
           type: java
           
