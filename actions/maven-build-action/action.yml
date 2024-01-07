@@ -19,7 +19,7 @@ runs:
         distribution: "temurin"
         cache: maven
     - name: Build with Maven cloud
-      run: cd ${{ inputs.directory }} && mvn -B verify sonar:sonar -D sonar.projectKey=elmilyass -D sonar.organization=DevopsProject -D sonar.host.url=https://sonarcloud.io -D sonar.login=$SONAR_TOKEN -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
+      run: cd ${{ inputs.directory }} && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ELMILYASS_DevopsProject -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUBTOKEN }}
         SONAR_TOKEN: ${{ inputs.SONARTOKEN }}
