@@ -13,6 +13,10 @@ runs:
         java-version: "17"
         distribution: "temurin"
         cache: maven
-    - name: Build with Maven
-      run: cd ${{ inputs.directory }} && mvn -B package -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
+  maven-build:
+    - name: Build with Maven cloud
+      run: cd ${{ inputs.directory }} && mvn -B verify sonar:sonar -Dsonar.projectKey=javareachabilityy -Dsonar.organization=javareachabilityy -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
+      env:
+        GIT_HUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: bash
