@@ -33,6 +33,7 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd angular-16-crud-example-master
+          snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high
 
   node-build:
