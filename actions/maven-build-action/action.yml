@@ -4,10 +4,6 @@ inputs:
   directory:
     description: "spring boot app directory"
     default: "."
-  GITHUBTOKEN:
-    description: "github token"
-  SONAR_TOKEN:
-    description: "sonarcloud token"
 runs:
   using: "composite"
   steps:
@@ -18,8 +14,5 @@ runs:
         distribution: "temurin"
         cache: maven
     - name: Build with Maven cloud
-      run: cd ${{ inputs.directory }} && mvn -B verify sonar:sonar -Dsonar.projectKey=javareachabilityy -Dsonar.organization=javareachabilityy -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
-      env:
-        GIT_HUB_TOKEN: ${{ inputs.GITHUBTOKEN }}
-        SONARCLOUD_TOKEN: ${{ inputs.SONAR_TOKEN }}
+      run: cd ${{ inputs.directory }} && mvn -B package -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
       shell: bash
