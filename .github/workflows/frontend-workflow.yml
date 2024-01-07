@@ -28,15 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Install Snyk CLI
+        run: npm install snyk
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-          target: angular-16-crud-example-master
-          
+        run: |
+          cd angular-16-crud-example-master
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --severity-threshold=high
 
   node-build:
     needs: sast
