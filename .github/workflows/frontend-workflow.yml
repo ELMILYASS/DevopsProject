@@ -23,8 +23,8 @@ jobs:
         with:
           projectBaseDir: angular-16-crud-example-master/
   node-build:
-    if: ${{ false }}
-    # if: "contains(github.event.head_commit.message,'run workflow')"
+    needs: sast
+    if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
     with:
       directory: "angular-16-crud-example-master"
