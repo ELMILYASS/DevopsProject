@@ -36,6 +36,7 @@ jobs:
           npm install
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high --file=package.json
+          snyk monitor
 
   node-build:
     needs: sast
