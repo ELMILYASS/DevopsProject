@@ -81,7 +81,6 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
-    permissions: write-all
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
@@ -98,8 +97,6 @@ jobs:
           sleep 5
         done
         echo "Service is now available."
-     - name: test
-       run: curl -v http://localhost:4200/
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
