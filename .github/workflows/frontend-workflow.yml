@@ -128,7 +128,7 @@ jobs:
         docker_name: 'owasp/zap2docker-stable'
         target: 'http://localhost:4200/'
         rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-J /zap/report/dast_report.json -a'
+        cmd_options: '-J report_json -a'
      - name: log 
        run: ls 
      - name: Save ZAP Report
