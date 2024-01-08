@@ -90,7 +90,7 @@ jobs:
      - name: Extract image version
        uses: ./actions/image-version-action
      - name: Run the frontend application
-       run: docker run elmazidi/myapp-frontend:${{ env.version }} -p 4200:80 
+       run: docker run -p 4200:80 elmazidi/myapp-frontend:${{ env.version }} 
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
