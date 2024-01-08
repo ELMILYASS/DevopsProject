@@ -51,10 +51,11 @@ jobs:
           snyk monitor
       - name: Save Snyk Analysis Report
         run: |
+          cd angular-16-crud-example-master
           mkdir -p reports
+          snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --json > reports/snyk_report.json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
       - name: cat
         run: ls && ls reports && cat reports/snyk_report.json
 
