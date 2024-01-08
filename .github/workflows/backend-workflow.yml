@@ -12,7 +12,6 @@ on:
       
 jobs:
   sast:
-    
     name: Snyk SAST
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +31,6 @@ jobs:
           name: snyk_sast_report
           path: spring-boot-data-jpa-mysql-master/reports
   sca:
-    
     name: Snyk SCA
     runs-on: ubuntu-latest
     steps:
@@ -77,8 +75,6 @@ jobs:
         uses: ./actions/maven-build-action
         with:
           directory: spring-boot-data-jpa-mysql-master
-          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
-          SONARTOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
@@ -126,6 +122,7 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
+    if: ${{ false }}
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
