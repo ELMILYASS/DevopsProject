@@ -53,10 +53,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-
     - name: Install Sonar Scanner
       run: cd angular-16-crud-example-master && npm install -g sonarqube-scanner
-
     - name: SonarCloud Scan
       run: |
         cd angular-16-crud-example-master 
