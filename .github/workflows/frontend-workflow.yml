@@ -90,6 +90,14 @@ jobs:
         ports:
           - 4200:80
     steps:
+     - name: Test Service Availability
+       run: |
+        # Wait for the service to be ready
+        while ! curl -s http://localhost:4200/ >/dev/null; do
+          echo "Waiting for the service to be available..."
+          sleep 5
+        done
+        echo "Service is now available."
      - name: test
        run: curl -v http://localhost:4200/
      - name: ZAP Scan
