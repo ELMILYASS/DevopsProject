@@ -63,17 +63,14 @@ jobs:
           -Dsonar.sources=src \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-    - name: logging
-      run: ls && cat angular-16-crud-example-master/.scannerwork/report-task.txt &&  echo "////////" && ls angular-16-crud-example-master/.scannerwork
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: sonarcloud_report
+        name: sonarcloud_sast_report
         path: angular-16-crud-example-master/.scannerwork/report-task.txt
   sca:
     name: Snyk SCA
-    # if: "contains(github.event.head_commit.message,'run workflow')"
-    if: ${{ false }}
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -142,6 +139,8 @@ jobs:
     needs: docker-build
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
+    outputs:
+     version: ${{ steps.extract-version.outputs.version }}
     services:
       frontend:
         image: elmazidi/myapp-frontend:${{needs.docker-build.outputs.version}}
@@ -172,13 +171,14 @@ jobs:
        with:
         name: zap_dast_report
         path: reports
+     - name: Share image version with the next Job
+       id: extract-version
+       run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
      
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
     needs: dast
     steps:
-      - name: version
-        run: echo ${{needs.docker-build.outputs.version}}
       - name: Configure Git
         run: |
           git config --global user.email "ilyasselmazidi123@gmail.com"
@@ -186,7 +186,7 @@ jobs:
       - name: Clone the Git repository containing the K8s cluster's configuration files.
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
       - name: Update deployment version
-        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-frontend:.*/myapp-frontend:${{needs.docker-build.outputs.version}}/g" frontend-app.yaml
+        run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-frontend:.*/myapp-frontend:${{needs.dast.outputs.version}}/g" frontend-app.yaml
       - name: Display updated deployment file
         run: cd K8sClusterDevopsProject/dev && cat frontend-app.yaml
 
