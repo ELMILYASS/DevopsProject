@@ -82,17 +82,11 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd angular-16-crud-example-master
+          mkdir -p reports
           npm install
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high --json > reports/snyk_sca_report.json --file=package.json || true
           snyk monitor
-      - name: Save Snyk Analysis Report
-        run: |
-          cd angular-16-crud-example-master
-          mkdir -p reports
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --json > reports/snyk_sca_report.json
-
       - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
