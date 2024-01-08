@@ -83,19 +83,12 @@ jobs:
   dast:
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.extract-version.outputs.version }}
     services:
       frontend:
-        image: elmazidi/myapp-frontend:${{ env.version }} 
+        image: elmazidi/myapp-frontend:latest
         ports:
           - 4200:80
     steps:
-     - uses: actions/checkout@v3
-     - name: Logging
-       run: ls
-     - name: Extract image version
-       uses: ./actions/image-version-action
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
