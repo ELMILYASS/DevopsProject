@@ -43,7 +43,6 @@ jobs:
   #         projectBaseDir: angular-16-crud-example-master/
   sast:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -63,21 +62,14 @@ jobs:
           -Dsonar.sources=src \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-        ls
-        echo //////////
-        ls src
-        echo ////////////
-        
-    - name: Logging
-      run : ls angular-16-crud-example-master/.scannerwork && cat angular-16-crud-example-master/.scannerwork/report-task.txt
+
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: sonarcloud_report
-        path: angular-16-crud-example-master/.scannerwork/report-task.txt
+        path: angular-16-crud-example-master/.scannerwork/sast-report-task.txt
      
   sca:
-    if: ${{ false }}
     name: Snyk SCA
     runs-on: ubuntu-latest
     steps:
@@ -105,7 +97,6 @@ jobs:
           path: angular-16-crud-example-master/reports
 
   node-build:
-    if: ${{ false }}
     needs: [sast,sca]
     # if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
@@ -113,7 +104,6 @@ jobs:
       directory: "angular-16-crud-example-master"
       artifact-name: "dist"
   docker-build:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: node-build
     outputs:
@@ -153,7 +143,6 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
-    if: ${{ false }}
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
@@ -189,7 +178,6 @@ jobs:
         path: reports
      
   gitops-k8s-deploy:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: docker-build
     steps:
