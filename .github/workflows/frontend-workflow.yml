@@ -64,12 +64,12 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: logging
-      run: ls && cat angular-16-crud-example-master/.scannerwork/sast-report-task.txt &&  echo "////////" && ls angular-16-crud-example-master/.scannerwork
+      run: ls && cat angular-16-crud-example-master/.scannerwork/report-task.txt &&  echo "////////" && ls angular-16-crud-example-master/.scannerwork
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: sonarcloud_report
-        path: angular-16-crud-example-master/.scannerwork/sast-report-task.txt
+        path: angular-16-crud-example-master/.scannerwork/report-task.txt
   sca:
     name: Snyk SCA
     # if: "contains(github.event.head_commit.message,'run workflow')"
