@@ -60,7 +60,7 @@ jobs:
         run: cd angular-16-crud-example-master && ls && ls reports && cat reports/snyk_report.json
 
       - name: Upload Snyk Report as Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: snyk_report
           path: angular-16-crud-example-master/reports
