@@ -152,15 +152,16 @@ jobs:
          DB_NAME: testdb
          ALLOWED_ORIGIN: "*"
     steps:
+     # - name: Test Service Availability
+     #   run: |
+     #    # Wait for the service to be ready
+     #    while ! curl -s http://localhost:8080/ >/dev/null; do
+     #      echo "Waiting for the service to be available..."
+     #      sleep 5
+     #    done
+     #    echo "Service is now available."
      - name: Test Service Availability
-       run: |
-        # Wait for the service to be ready
-        while ! curl -s http://localhost:8080/ >/dev/null; do
-          docker logs backend
-          echo "Waiting for the service to be available..."
-          sleep 5
-        done
-        echo "Service is now available."
+       run: curl -s http://localhost:8080
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
