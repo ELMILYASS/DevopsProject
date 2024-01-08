@@ -27,22 +27,50 @@ jobs:
   #       with:
   #         name: snyk_sast_report
   #         path: angular-16-crud-example-master/reports
+  # sast:
+  #   name: SonarCloud SAST
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0 
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}  
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       with:
+  #         projectBaseDir: angular-16-crud-example-master/
   sast:
-    name: SonarCloud SAST
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: angular-16-crud-example-master/
-      - name: logging
-        run: cd angular-16-crud-example-master && ls && ls target && cat target/sonars
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Sonar Scanner
+      run: cd angular-16-crud-example-master && npm install -g sonarqube-scanner
+
+    - name: SonarCloud Scan
+      run: |
+        cd angular-16-crud-example-master 
+        sonar-scanner \
+          -Dsonar.sources=src \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        ls
+
+    - name: Upload SonarCloud Report as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: sonarcloud_report
+        path: angular-16-crud-example-master/.scannerwork/report-task.txt
+     
   sca:
     if: ${{ false }}
     name: Snyk SCA
