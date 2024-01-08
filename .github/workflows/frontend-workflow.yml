@@ -9,6 +9,7 @@ on:
       - "!angular-16-crud-example-master/README.md"
 jobs:
   sast:
+    if: ${{ false }}
     name: SonarCloud SAST
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +35,7 @@ jobs:
          name: sonarcloud_report
          path: reports
   sca:
-    if: ${{ false }}
+
     name: Snyk SCA
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +49,20 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high --file=package.json
           snyk monitor
+      - name: Save Snyk Analysis Report
+        run: |
+          mkdir -p reports
+          snyk test --json > reports/snyk_report.json
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: cat
+        run: ls && ls reports && cat reports/snyk_report.json
+
+      - name: Upload Snyk Report as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: snyk_report
+          path: reports
 
   node-build:
     if: ${{ false }}
