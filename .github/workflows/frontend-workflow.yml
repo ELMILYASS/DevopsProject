@@ -42,6 +42,7 @@ jobs:
   #       with:
   #         projectBaseDir: angular-16-crud-example-master/
   sast:
+    name: Snyk SAST
     if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
