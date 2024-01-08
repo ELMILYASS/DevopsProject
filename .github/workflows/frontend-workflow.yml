@@ -53,7 +53,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: '20'
     - name: Install Sonar Scanner
       run: cd angular-16-crud-example-master && npm install -g sonarqube-scanner
     - name: SonarCloud Scan
@@ -63,7 +63,8 @@ jobs:
           -Dsonar.sources=src \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
+    - name: logging
+      run: cat angular-16-crud-example-master/.scannerwork/sast-report-task.txt && && echo "////////" ls angular-16-crud-example-master/.scannerwork
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -71,7 +72,8 @@ jobs:
         path: angular-16-crud-example-master/.scannerwork/sast-report-task.txt
   sca:
     name: Snyk SCA
-    if: "contains(github.event.head_commit.message,'run workflow')"
+    # if: "contains(github.event.head_commit.message,'run workflow')"
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
