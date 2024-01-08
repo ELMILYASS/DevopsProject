@@ -161,7 +161,7 @@ jobs:
      #    done
      #    echo "Service is now available."
      - name: Test Service Availability
-       run: curl -s http://localhost:8080
+       run: sleep 80 && curl http://localhost:8080
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
