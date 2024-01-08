@@ -89,6 +89,8 @@ jobs:
         ports:
           - 4200:80
     steps:
+     - name: test
+       run: curl http://localhost:4200/
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
