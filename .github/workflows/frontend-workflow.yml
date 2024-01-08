@@ -70,7 +70,6 @@ jobs:
       with:
         name: sonarcloud_report
         path: angular-16-crud-example-master/.scannerwork/sast-report-task.txt
-     
   sca:
     name: Snyk SCA
     if: "contains(github.event.head_commit.message,'run workflow')"
