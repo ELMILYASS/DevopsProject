@@ -7,6 +7,7 @@ on:
       - ".github/workflows/frontend-workflow.yml"
       - "!README.md"
       - "!angular-16-crud-example-master/README.md"
+      
 jobs:
   sast:
     if: ${{ false }}
