@@ -27,6 +27,7 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd spring-boot-data-jpa-mysql-master
+          
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
           mkdir -p reports
@@ -52,6 +53,7 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd spring-boot-data-jpa-mysql-master
+          chmod +x mvnw
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high --file=pom.xml || true
