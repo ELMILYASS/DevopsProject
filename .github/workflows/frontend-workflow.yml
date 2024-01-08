@@ -42,7 +42,7 @@ jobs:
         with:
           projectBaseDir: angular-16-crud-example-master/
       - name: logging
-        run: ls && ls target && cat target/sonars
+        run: cd angular-16-crud-example-master && ls && ls target && cat target/sonars
   sca:
     if: ${{ false }}
     name: Snyk SCA
