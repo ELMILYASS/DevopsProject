@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: snyk_report
-          path: reports
+          path: angular-16-crud-example-master/reports
 
   node-build:
     if: ${{ false }}
