@@ -64,7 +64,12 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         ls
-
+        echo //////////
+        ls src
+        echo ////////////
+        
+    - name: Logging
+      run : ls angular-16-crud-example-master/.scannerwork && cat angular-16-crud-example-master/.scannerwork/report-task.txt
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -176,7 +181,7 @@ jobs:
        run: ls 
      - name: Save ZAP Report
        run: mkdir -p reports && mv report_json.json reports/dast_report.json
-    
+   
      - name: Upload ZAP Report as Artifact
        uses: actions/upload-artifact@v2
        with:
