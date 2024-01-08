@@ -64,7 +64,7 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: logging
-      run: cat angular-16-crud-example-master/.scannerwork/sast-report-task.txt && && echo "////////" ls angular-16-crud-example-master/.scannerwork
+      run: cat angular-16-crud-example-master/.scannerwork/sast-report-task.txt &&  echo "////////" && ls angular-16-crud-example-master/.scannerwork
     - name: Upload SonarCloud Report as Artifact
       uses: actions/upload-artifact@v2
       with:
