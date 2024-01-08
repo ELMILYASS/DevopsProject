@@ -3,12 +3,7 @@ description: "Steps for building Maven app"
 inputs:
   directory:
     description: "spring boot app directory"
-    default: "."
-  GITHUBTOKEN:
-    description: "github token"
-  SONARTOKEN:
-    description: "sonarcloud token"
-  
+    default: "."  
 runs:
   using: "composite"
   steps:
@@ -19,8 +14,5 @@ runs:
         distribution: "temurin"
         cache: maven
     - name: Build with Maven cloud
-      run: cd ${{ inputs.directory }} && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ELMILYASS_DevopsProject -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
-      env:
-        GITHUB_TOKEN: ${{ inputs.GITHUBTOKEN }}
-        SONAR_TOKEN: ${{ inputs.SONARTOKEN }}
+      run: cd ${{ inputs.directory }} && mvn -B package -D DB_HOST=localhost:3306 -D DB_NAME=testdb -D MYSQL_USERNAME=root -D MYSQL_PASSWORD=password -D ALLOWED_ORIGIN=*
       shell: bash
