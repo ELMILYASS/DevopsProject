@@ -21,8 +21,7 @@ jobs:
           npm install
           snyk auth ${{ secrets.SNYK_TOKEN }}
           mkdir -p reports
-          snyk code test --json-file-output=./reports/snyk_sast_report.json
-          ls reports
+          snyk code test --json-file-output=reports/snyk_sast_report.json
       - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
