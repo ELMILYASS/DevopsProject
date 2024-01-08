@@ -160,8 +160,14 @@ jobs:
      #      sleep 5
      #    done
      #    echo "Service is now available."
-     - name: Test Service Availability
-       run: sleep 80 && curl http://localhost:8080
+     - name: Get container names
+       run: container_names=$(docker ps --format "{{.Names}}")
+
+     - name: View logs of all containers
+       run: |
+          for container_name in $container_names; do
+            docker logs "$container_name"
+          done
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
