@@ -173,7 +173,7 @@ jobs:
         path: reports
      - name: Share image version with the next Job
        id: extract-version
-       run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
+       run: echo "version=:${{needs.docker-build.outputs.version}}" >> "$GITHUB_OUTPUT"
      
   gitops-k8s-deploy:
     runs-on: ubuntu-latest
