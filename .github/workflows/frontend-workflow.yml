@@ -182,7 +182,6 @@ jobs:
         run: git clone https://github.com/ELMILYASS/K8sClusterDevopsProject.git
       - name: Update deployment version
         run: cd K8sClusterDevopsProject/dev && sed -i "s/myapp-frontend:.*/myapp-frontend:${{needs.docker-build.outputs.version}}/g" frontend-app.yaml
-
       - name: Display updated deployment file
         run: cd K8sClusterDevopsProject/dev && cat frontend-app.yaml
 
