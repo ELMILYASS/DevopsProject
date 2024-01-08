@@ -9,6 +9,7 @@ on:
       - "!angular-16-crud-example-master/README.md"
 jobs:
   sast:
+    if: ${{ false }}
     name: SonarCloud SAST
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +24,7 @@ jobs:
         with:
           projectBaseDir: angular-16-crud-example-master/
   sca:
+    if: ${{ false }}
     name: Snyk SCA
     runs-on: ubuntu-latest
     steps:
@@ -38,8 +40,9 @@ jobs:
           snyk monitor
 
   node-build:
+    if: ${{ false }}
     needs: [sast,sca]
-    if: "contains(github.event.head_commit.message,'run workflow')"
+    # if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
     with:
       directory: "angular-16-crud-example-master"
@@ -77,7 +80,22 @@ jobs:
       - name: Share image version with the next Job
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
-
+  dast:
+    name: OWASP ZAP DAST
+    runs-on: ubuntu-latest
+    steps:
+     - name: Extract image version
+       uses: ./actions/image-version-action
+     - name: Run the frontend application
+       run: docker run elmazidi/myapp-frontend:${{ env.version }} -p 4200:80 
+     - name: ZAP Scan
+       uses: zaproxy/action-baseline@v0.6.1
+       with:
+        docker_name: 'owasp/zap2docker-stable'
+        target: 'http://localhost:4200/'
+        rules_file_name: '.zap/rules.tsv'
+        cmd_options: '-a'
+     
   gitops-k8s-deploy:
     if: ${{ false }}
     runs-on: ubuntu-latest
