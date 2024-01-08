@@ -12,7 +12,6 @@ on:
       
 jobs:
   sast:
-    if: ${{ false }}
     name: Snyk SAST
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +37,6 @@ jobs:
           name: snyk_sast_report
           path: spring-boot-data-jpa-mysql-master/reports
   sca:
-    if: ${{ false }}
     name: Snyk SCA
     runs-on: ubuntu-latest
     steps:
@@ -66,8 +64,8 @@ jobs:
           name: snyk_sca_report
           path: spring-boot-data-jpa-mysql-master/reports
   maven-build:
-    if: ${{ false }}
-    # if: "contains(github.event.head_commit.message,'run workflow')"
+    needs: [sast,sca]
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -91,7 +89,6 @@ jobs:
           path: spring-boot-data-jpa-mysql-master/target/*.jar
 
   docker-build:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: maven-build
     outputs:
@@ -130,52 +127,51 @@ jobs:
       - name: Share image version with the next Job
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
-  dast:
-    name: OWASP ZAP DAST
-    runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.2.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-      backend:
-       image: elmazidi/myapp-backend:latest
-       ports:
-         - 8080:8080
-       env:
-         MYSQL_PASSWORD: password
-         MYSQL_USERNAME: root
-         DB_HOST: http://localhost:3306
-         DB_NAME: testdb
-    steps:
-     - name: Test Service Availability
-       run: |
-        # Wait for the service to be ready
-        while ! curl -s http://localhost:8080/ >/dev/null; do
-          echo "Waiting for the service to be available..."
-          sleep 5
-        done
-        echo "Service is now available."
-     - name: ZAP Scan
-       uses: zaproxy/action-baseline@v0.6.1
-       with:
-        docker_name: 'owasp/zap2docker-stable'
-        target: 'http://localhost:8080/'
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-J report_json -a'
-     - name: Save ZAP Report
-       run: mkdir -p reports && mv report_json.json reports/dast_report.json
+  # dast:
+  #   name: OWASP ZAP DAST
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     mysql:
+  #       image: mysql:8.2.0
+  #       env:
+  #         MYSQL_ROOT_PASSWORD: password
+  #       ports:
+  #         - 3306:3306
+  #       options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+  #     backend:
+  #      image: elmazidi/myapp-backend:latest
+  #      ports:
+  #        - 8080:8080
+  #      env:
+  #        MYSQL_PASSWORD: password
+  #        MYSQL_USERNAME: root
+  #        DB_HOST: http://localhost:3306
+  #        DB_NAME: testdb
+  #   steps:
+  #    - name: Test Service Availability
+  #      run: |
+  #       # Wait for the service to be ready
+  #       while ! curl -s http://localhost:8080/ >/dev/null; do
+  #         echo "Waiting for the service to be available..."
+  #         sleep 5
+  #       done
+  #       echo "Service is now available."
+  #    - name: ZAP Scan
+  #      uses: zaproxy/action-baseline@v0.6.1
+  #      with:
+  #       docker_name: 'owasp/zap2docker-stable'
+  #       target: 'http://localhost:8080/'
+  #       rules_file_name: '.zap/rules.tsv'
+  #       cmd_options: '-J report_json -a'
+  #    - name: Save ZAP Report
+  #      run: mkdir -p reports && mv report_json.json reports/dast_report.json
     
-     - name: Upload ZAP Report as Artifact
-       uses: actions/upload-artifact@v2
-       with:
-        name: zap_dast_report
-        path: reports
+  #    - name: Upload ZAP Report as Artifact
+  #      uses: actions/upload-artifact@v2
+  #      with:
+  #       name: zap_dast_report
+  #       path: reports
   gitops-k8s-deploy:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: docker-build
     steps:
