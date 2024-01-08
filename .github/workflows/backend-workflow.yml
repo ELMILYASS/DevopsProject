@@ -27,7 +27,6 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd spring-boot-data-jpa-mysql-master
-          
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
           mkdir -p reports
@@ -53,18 +52,12 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd spring-boot-data-jpa-mysql-master
+          mkdir -p reports
           chmod +x mvnw
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=high --file=pom.xml || true
+          snyk test --severity-threshold=high --json > reports/snyk_sca_report.json --file=pom.xml || true
           snyk monitor
-      - name: Save Snyk Analysis Report
-        run: |
-          cd spring-boot-data-jpa-mysql-master
-          mkdir -p reports
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --json > reports/snyk_sca_report.json
-
       - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
