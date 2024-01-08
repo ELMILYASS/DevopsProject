@@ -131,7 +131,6 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
-    if: ${{ false }}
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
