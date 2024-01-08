@@ -27,6 +27,22 @@ jobs:
   #       with:
   #         name: snyk_sast_report
   #         path: angular-16-crud-example-master/reports
+  sast:
+    name: SonarCloud SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: angular-16-crud-example-master/
+      - name: logging
+        run: ls && ls target && cat target/sonars
   sca:
     if: ${{ false }}
     name: Snyk SCA
