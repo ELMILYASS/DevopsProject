@@ -128,7 +128,7 @@ jobs:
         docker_name: 'owasp/zap2docker-stable'
         target: 'http://localhost:4200/'
         rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a --summary -J /zap/report/dast_report.json'
+        cmd_options: '-J /zap/report/dast_report.json -a'
      - name: Save ZAP Report
        run: mkdir -p reports && mv /zap/report/dast_report.json reports/dast_report.json
      - name: Upload ZAP Report as Artifact
