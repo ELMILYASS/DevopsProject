@@ -84,6 +84,11 @@ jobs:
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     steps:
+     - uses: actions/checkout@v3
+       with:
+          path: /actions
+     - name: Logging
+       uses: ls
      - name: Extract image version
        uses: ./actions/image-version-action
      - name: Run the frontend application
