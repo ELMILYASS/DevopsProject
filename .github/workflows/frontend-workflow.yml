@@ -132,7 +132,7 @@ jobs:
      - name: log 
        run: ls 
      - name: Save ZAP Report
-       run: mkdir -p reports && mv /zap/report/dast_report.json reports/dast_report.json
+       run: mkdir -p reports && mv report_json.json reports/dast_report.json
     
      - name: Upload ZAP Report as Artifact
        uses: actions/upload-artifact@v2
