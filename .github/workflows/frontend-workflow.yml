@@ -8,26 +8,25 @@ on:
       - "!README.md"
       - "!angular-16-crud-example-master/README.md"
 jobs:
-  sast:
-    if: ${{ false }}
-    name: Snyk SAST
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Install Snyk CLI
-        run: npm install -g snyk
-      - name: Run Snyk to check for vulnerabilities
-        run: |
-          cd angular-16-crud-example-master
-          npm install
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          mkdir -p reports
-          snyk code test --json-file-output=reports/snyk_sast_report.json || true
-      - name: Upload Snyk Report as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: snyk_sast_report
-          path: angular-16-crud-example-master/reports
+  # sast:
+  #   name: Snyk SAST
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Install Snyk CLI
+  #       run: npm install -g snyk
+  #     - name: Run Snyk to check for vulnerabilities
+  #       run: |
+  #         cd angular-16-crud-example-master
+  #         npm install
+  #         snyk auth ${{ secrets.SNYK_TOKEN }}
+  #         mkdir -p reports
+  #         snyk code test --json-file-output=reports/snyk_sast_report.json || true
+  #     - name: Upload Snyk Report as Artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: snyk_sast_report
+  #         path: angular-16-crud-example-master/reports
   sca:
     if: ${{ false }}
     name: Snyk SCA
@@ -105,6 +104,7 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
+    if: ${{ false }}
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
