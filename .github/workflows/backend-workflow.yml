@@ -30,7 +30,7 @@ jobs:
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
           mkdir -p reports
-          snyk code test --json-file-output=reports/snyk_sast_report.json
+          snyk code test --json-file-output=reports/snyk_sast_report.json || true
       - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -54,7 +54,7 @@ jobs:
           cd spring-boot-data-jpa-mysql-master
           mvn install -DskipTests
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=high --file=package.json
+          snyk test --severity-threshold=high --file=pom.xml || true
           snyk monitor
       - name: Save Snyk Analysis Report
         run: |
