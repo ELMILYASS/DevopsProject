@@ -11,8 +11,56 @@ on:
       - "actions/maven-build-action/action.yml"
       
 jobs:
+  sast:
+    
+    name: Snyk SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run Snyk to check for vulnerabilities
+        run: |
+          cd spring-boot-data-jpa-mysql-master
+          mvn install -DskipTests
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          mkdir -p reports
+          snyk code test --json-file-output=reports/snyk_sast_report.json
+      - name: Upload Snyk Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk_sast_report
+          path: spring-boot-data-jpa-mysql-master/reports
+  sca:
+    
+    name: Snyk SCA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run Snyk to check for vulnerabilities
+        run: |
+          cd spring-boot-data-jpa-mysql-master
+          mvn install -DskipTests
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --severity-threshold=high --file=package.json
+          snyk monitor
+      - name: Save Snyk Analysis Report
+        run: |
+          cd spring-boot-data-jpa-mysql-master
+          mkdir -p reports
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --json > reports/snyk_sca_report.json
+
+      - name: Upload Snyk Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk_sca_report
+          path: spring-boot-data-jpa-mysql-master/reports
   maven-build:
-    if: "contains(github.event.head_commit.message,'run workflow')"
+    if: ${{ false }}
+    # if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -38,6 +86,7 @@ jobs:
           path: spring-boot-data-jpa-mysql-master/target/*.jar
 
   docker-build:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: maven-build
     outputs:
@@ -54,6 +103,21 @@ jobs:
         uses: ./actions/image-version-action
       - name: Build Docker image
         run: cd spring-boot-data-jpa-mysql-master && docker build -t elmazidi/myapp-backend:${{ env.version }} .
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run Snyk to check for vulnerabilities
+        run: |
+          cd spring-boot-data-jpa-mysql-master
+          mkdir -p reports
+          npm install
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk container test elmazidi/myapp-backend:${{ env.version }} --json-file-output=reports/container_report.json
+          snyk container monitor elmazidi/myapp-backend:${{ env.version }}
+      - name: Upload Snyk Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: container_report
+          path: spring-boot-data-jpa-mysql-master/reports
       - name: Log in to Docker Hub
         run: docker login -u elmazidi -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push backend Docker image
@@ -61,7 +125,52 @@ jobs:
       - name: Share image version with the next Job
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
+  dast:
+    name: OWASP ZAP DAST
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.2.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      backend:
+       image: elmazidi/myapp-backend:latest
+       ports:
+         - 8080:8080
+       env:
+         MYSQL_PASSWORD: password
+         MYSQL_USERNAME: root
+         DB_HOST: http://localhost:3306
+         DB_NAME: testdb
+    steps:
+     - name: Test Service Availability
+       run: |
+        # Wait for the service to be ready
+        while ! curl -s http://localhost:8080/ >/dev/null; do
+          echo "Waiting for the service to be available..."
+          sleep 5
+        done
+        echo "Service is now available."
+     - name: ZAP Scan
+       uses: zaproxy/action-baseline@v0.6.1
+       with:
+        docker_name: 'owasp/zap2docker-stable'
+        target: 'http://localhost:8080/'
+        rules_file_name: '.zap/rules.tsv'
+        cmd_options: '-J report_json -a'
+     - name: Save ZAP Report
+       run: mkdir -p reports && mv report_json.json reports/dast_report.json
+    
+     - name: Upload ZAP Report as Artifact
+       uses: actions/upload-artifact@v2
+       with:
+        name: zap_dast_report
+        path: reports
   gitops-k8s-deploy:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: docker-build
     steps:
