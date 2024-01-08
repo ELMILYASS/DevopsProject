@@ -42,6 +42,7 @@ jobs:
   #       with:
   #         projectBaseDir: angular-16-crud-example-master/
   sast:
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -71,6 +72,7 @@ jobs:
      
   sca:
     name: Snyk SCA
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -98,7 +100,6 @@ jobs:
 
   node-build:
     needs: [sast,sca]
-    # if: "contains(github.event.head_commit.message,'run workflow')"
     uses: ./.github/workflows/angular-build.yaml
     with:
       directory: "angular-16-crud-example-master"
@@ -143,11 +144,12 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
+    needs: docker-build
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
       frontend:
-        image: elmazidi/myapp-frontend:latest
+        image: elmazidi/myapp-frontend:${{needs.docker-build.outputs.version}}
         ports:
           - 4200:80
     steps:
