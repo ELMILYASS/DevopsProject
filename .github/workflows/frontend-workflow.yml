@@ -9,7 +9,6 @@ on:
       - "!angular-16-crud-example-master/README.md"
 jobs:
   sast:
-    if: ${{ false }}
     name: SonarCloud SAST
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +22,15 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: angular-16-crud-example-master/
+      - name: Save SonarCloud Analysis Report
+        run: |
+         mkdir -p reports
+         curl -s -u ${{ secrets.SONAR_TOKEN }}: -X GET "https://sonarcloud.io/api/ce/task?id=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: -X GET "https://sonarcloud.io/api/project_branches/get?projectKey=your_project_key" | jq -r '.branches[0].mergeBranchUuid')" | jq -r '.taskUrl' > reports/sonarcloud_report.txt
+      - name: Upload SonarCloud Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+         name: sonarcloud_report
+         path: reports
   sca:
     if: ${{ false }}
     name: Snyk SCA
@@ -81,6 +89,7 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
+    if: ${{ false }}
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     services:
