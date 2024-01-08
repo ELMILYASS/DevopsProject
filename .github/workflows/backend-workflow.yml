@@ -156,6 +156,7 @@ jobs:
        run: |
         # Wait for the service to be ready
         while ! curl -s http://localhost:8080/ >/dev/null; do
+          docker logs backend
           echo "Waiting for the service to be available..."
           sleep 5
         done
