@@ -9,31 +9,25 @@ on:
       - "!angular-16-crud-example-master/README.md"
 jobs:
   sast:
-    if: ${{ false }}
-    name: SonarCloud SAST
+    name: Snyk SAST
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: angular-16-crud-example-master/
-      - name: Save SonarCloud Analysis Report
+      - uses: actions/checkout@master
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run Snyk to check for vulnerabilities
         run: |
-         mkdir -p reports
-         curl -s -u ${{ secrets.SONAR_TOKEN }}: -X GET "https://sonarcloud.io/api/ce/task?id=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: -X GET "https://sonarcloud.io/api/project_branches/get?projectKey=ELMILYASS_DevopsProject" | jq -r '.branches[0].mergeBranchUuid')" | jq -r '.taskUrl' > reports/sonarcloud_report.txt
-      - name: cat
-        run: ls && ls reports && cat reports/sonarcloud_report.txt
-      - name: Upload SonarCloud Report as Artifact
+          cd angular-16-crud-example-master
+          npm install
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          mkdir -p reports
+          snyk code test --json-file-output=reports/snyk_sast_report.json
+
+      - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
-         name: sonarcloud_report
-         path: reports
+          name: snyk_sast_report
+          path: angular-16-crud-example-master/reports
   sca:
 
     name: Snyk SCA
@@ -54,15 +48,12 @@ jobs:
           cd angular-16-crud-example-master
           mkdir -p reports
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --json > reports/snyk_report.json
-
-      - name: cat
-        run: cd angular-16-crud-example-master && ls && ls reports && cat reports/snyk_report.json
+          snyk test --json > reports/snyk_sca_report.json
 
       - name: Upload Snyk Report as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: snyk_report
+          name: snyk_sca_report
           path: angular-16-crud-example-master/reports
 
   node-build:
