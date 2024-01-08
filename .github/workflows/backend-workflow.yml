@@ -150,24 +150,15 @@ jobs:
          MYSQL_USERNAME: root
          DB_HOST: http://localhost:3306
          DB_NAME: testdb
-         ALLOWED_ORIGIN: "*"
     steps:
-     # - name: Test Service Availability
-     #   run: |
-     #    # Wait for the service to be ready
-     #    while ! curl -s http://localhost:8080/ >/dev/null; do
-     #      echo "Waiting for the service to be available..."
-     #      sleep 5
-     #    done
-     #    echo "Service is now available."
-     - name: Get container names
-       run: container_names=$(docker ps --format "{{.Names}}")
-
-     - name: View logs of all containers
+     - name: Test Service Availability
        run: |
-          for container_name in $container_names; do
-            docker logs "$container_name"
-          done
+        # Wait for the service to be ready
+        while ! curl -s http://localhost:8080/ >/dev/null; do
+          echo "Waiting for the service to be available..."
+          sleep 5
+        done
+        echo "Service is now available."
      - name: ZAP Scan
        uses: zaproxy/action-baseline@v0.6.1
        with:
