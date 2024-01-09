@@ -120,7 +120,6 @@ jobs:
           -F "file=@angular-16-crud-example-master/reports/snyk_sca_report.json"
 
   node-build:
-    if: ${{ false }}
     needs: [sast,sca]
     uses: ./.github/workflows/angular-build.yaml
     with:
