@@ -218,7 +218,7 @@ jobs:
           -F "minimum_severity=Info" \
           -F "skip_duplicates=true" \
           -F "close_old_findings=false" \
-          -F "file=report_json.json"
+          -F "file=@report_json.json"
      - name: Save ZAP Report
        run: mkdir -p reports && mv report_json.json reports/dast_report.json
      - name: Upload ZAP Report as Artifact
