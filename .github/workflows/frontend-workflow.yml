@@ -104,6 +104,7 @@ jobs:
         with:
           name: snyk_sca_report
           path: angular-16-crud-example-master/reports
+          
       - name: Upload Artifacts to DefectDojo
         run: |
           curl -X POST https://2f6a-105-74-3-141.ngrok-free.app//api/v2/import-scan/ \
