@@ -44,8 +44,7 @@ jobs:
   #         projectBaseDir: angular-16-crud-example-master/
   sast:
     name: SonarCloud SAST
-    # if: "contains(github.event.head_commit.message,'run workflow')"
-    if: ${{ false }}
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -86,8 +85,7 @@ jobs:
 
   sca:
     name: Snyk SCA
-    # if: "contains(github.event.head_commit.message,'run workflow')"
-    if: ${{ false }}
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -181,14 +179,14 @@ jobs:
         id: extract-version
         run: echo "version=${{ env.version }}" >> "$GITHUB_OUTPUT"
   dast:
-    # needs: docker-build
+    needs: docker-build
     name: OWASP ZAP DAST
     runs-on: ubuntu-latest
     outputs:
      version: ${{ steps.extract-version.outputs.version }}
     services:
       frontend:
-        image: elmazidi/myapp-frontend:1.0.0
+        image: elmazidi/myapp-frontend:${{needs.docker-build.outputs.version}}
         ports:
           - 4200:80
     steps:
