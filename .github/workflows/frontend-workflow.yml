@@ -188,7 +188,7 @@ jobs:
      version: ${{ steps.extract-version.outputs.version }}
     services:
       frontend:
-        image: elmazidi/myapp-frontend:latest
+        image: elmazidi/myapp-frontend:1.0.0
         ports:
           - 4200:80
     steps:
