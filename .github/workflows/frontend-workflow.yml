@@ -85,8 +85,7 @@ jobs:
 
   sca:
     name: Snyk SCA
-    if: ${{ false }}
-    # if: "contains(github.event.head_commit.message,'run workflow')"
+    if: "contains(github.event.head_commit.message,'run workflow')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -107,7 +106,6 @@ jobs:
           path: angular-16-crud-example-master/reports
       - name: Upload Artifacts to DefectDojo
         run: |
-          cd angular-16-crud-example-master/.scannerwork
           curl -X POST https://2f6a-105-74-3-141.ngrok-free.app//api/v2/import-scan/ \
           -H "Authorization: Token ${{ secrets.DEFECTDOJO_API_KEY }}" \
           -F "engagement=7" \
@@ -157,7 +155,6 @@ jobs:
           snyk container monitor elmazidi/myapp-frontend:${{ env.version }}
       - name: Upload Artifacts to DefectDojo
         run: |
-          cd angular-16-crud-example-master/.scannerwork
           curl -X POST https://2f6a-105-74-3-141.ngrok-free.app//api/v2/import-scan/ \
           -H "Authorization: Token ${{ secrets.DEFECTDOJO_API_KEY }}" \
           -F "engagement=7" \
@@ -212,7 +209,6 @@ jobs:
         cmd_options: '-J report_json -a'
      - name: Upload Artifacts to DefectDojo
        run: |
-          cd angular-16-crud-example-master/.scannerwork
           curl -X POST https://2f6a-105-74-3-141.ngrok-free.app//api/v2/import-scan/ \
           -H "Authorization: Token ${{ secrets.DEFECTDOJO_API_KEY }}" \
           -F "engagement=7" \
