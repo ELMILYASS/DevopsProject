@@ -68,6 +68,14 @@ jobs:
       with:
         name: sonarcloud_sast_report
         path: angular-16-crud-example-master/.scannerwork/report-task.txt
+    - name: Upload Artifacts to DefectDojo
+      run: |
+          cd angular-16-crud-example-master/.scannerwork
+          curl -X POST -H "Authorization: ApiKey ${{ secrets.DEFECTDOJO_API_KEY }}" \
+               -F "engagement=3" \
+               -F "file=@report-task.txt" \
+               -F "scan_type=ZAP Scan" \
+               https://64ca-105-74-3-141.ngrok-free.app/api/v2/import-scan/
   sca:
     name: Snyk SCA
     if: "contains(github.event.head_commit.message,'run workflow')"
@@ -91,6 +99,7 @@ jobs:
           path: angular-16-crud-example-master/reports
 
   node-build:
+    if: ${{ false }}
     needs: [sast,sca]
     uses: ./.github/workflows/angular-build.yaml
     with:
