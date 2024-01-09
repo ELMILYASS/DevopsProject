@@ -118,8 +118,6 @@ jobs:
           -F "skip_duplicates=true" \
           -F "close_old_findings=false" \
           -F "file=@angular-16-crud-example-master/reports/snyk_sca_report.json"
-
-
   node-build:
     needs: [sast,sca]
     uses: ./.github/workflows/angular-build.yaml
