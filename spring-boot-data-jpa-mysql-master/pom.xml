@@ -7,7 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.0</version>
-		<relativePath />
+		<relativePath/>
 	</parent>
 	<groupId>com.bezkoder</groupId>
 	<artifactId>spring-boot-data-jpa</artifactId>
@@ -33,7 +33,7 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-actuator</artifactId>
-		    <version>3.2.0</version>
+		    <version>3.3.7</version>
 		</dependency>
 
 		<dependency>
